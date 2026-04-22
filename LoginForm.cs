@@ -13,15 +13,13 @@ namespace SportResult
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string login = txtLogin.Text;
-            string pass = txtPassword.Text;
+            string login = txtLogin.Text.Trim();
+            string pass = txtPassword.Text.Trim();
 
             using (var conn = Database.GetConnection())
             {
-                string sql = "SELECT Role FROM Users WHERE Login=@login AND Password=@pass";
+                string sql = "SELECT Role FROM Users WHERE Login = '" + login + "' AND Password = '" + pass + "'";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.AddWithValue("@login", login);
-                cmd.Parameters.AddWithValue("@pass", pass);
 
                 object result = cmd.ExecuteScalar();
 
@@ -44,6 +42,8 @@ namespace SportResult
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
+            txtLogin.Text = "admin";
+            txtPassword.Text = "123";
         }
     }
 }

@@ -25,14 +25,16 @@ namespace SportResult
                         r.Id,
                         s.FullName AS Спортсмен,
                         c.Name AS Соревнование,
+                        sp.Name AS Вид_спорта,
                         r.Result AS Результат,
                         r.Place AS Место
                     FROM Results r
                     JOIN Sportsmen s ON r.SportsmanId = s.Id
-                    JOIN Competitions c ON r.CompetitionId = c.Id";
+                    JOIN Competitions c ON r.CompetitionId = c.Id
+                    JOIN Sports sp ON c.SportId = sp.Id";
 
                 adapter = new SQLiteDataAdapter(sql, conn);
-                SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adapter);
+                new SQLiteCommandBuilder(adapter);
 
                 table = new DataTable();
                 adapter.Fill(table);
@@ -46,7 +48,7 @@ namespace SportResult
             try
             {
                 adapter.Update(table);
-                MessageBox.Show("Изменения сохранены!");
+                MessageBox.Show("Сохранено!");
             }
             catch (Exception ex)
             {
@@ -56,7 +58,7 @@ namespace SportResult
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow != null)
+            if (dataGridView1.CurrentRow != null && !dataGridView1.CurrentRow.IsNewRow)
             {
                 dataGridView1.Rows.RemoveAt(dataGridView1.CurrentRow.Index);
             }

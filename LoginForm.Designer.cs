@@ -21,99 +21,72 @@
 
         private void InitializeComponent()
         {
-            txtLogin = new TextBox();
-            txtPassword = new TextBox();
-            btnLogin = new Button();
-            lblLogin = new Label();
-            lblPassword = new Label();
-            lblTitle = new Label();
-            SuspendLayout();
-            // 
-            // txtLogin
-            // 
-            txtLogin.Font = new Font("Segoe UI", 12F);
-            txtLogin.Location = new Point(175, 92);
-            txtLogin.Margin = new Padding(4, 3, 4, 3);
-            txtLogin.Name = "txtLogin";
-            txtLogin.Size = new Size(233, 29);
-            txtLogin.TabIndex = 0;
-            // 
-            // txtPassword
-            // 
-            txtPassword.Font = new Font("Segoe UI", 12F);
-            txtPassword.Location = new Point(175, 138);
-            txtPassword.Margin = new Padding(4, 3, 4, 3);
-            txtPassword.Name = "txtPassword";
-            txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(233, 29);
-            txtPassword.TabIndex = 1;
-            // 
-            // btnLogin
-            // 
-            btnLogin.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnLogin.Location = new Point(175, 196);
-            btnLogin.Margin = new Padding(4, 3, 4, 3);
-            btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(233, 46);
-            btnLogin.TabIndex = 2;
-            btnLogin.Text = "Войти";
-            btnLogin.UseVisualStyleBackColor = true;
-            btnLogin.Click += btnLogin_Click;
-            // 
-            // lblLogin
-            // 
-            lblLogin.AutoSize = true;
-            lblLogin.Font = new Font("Segoe UI", 12F);
-            lblLogin.Location = new Point(82, 96);
-            lblLogin.Margin = new Padding(4, 0, 4, 0);
-            lblLogin.Name = "lblLogin";
-            lblLogin.Size = new Size(57, 21);
-            lblLogin.TabIndex = 3;
-            lblLogin.Text = "Логин:";
-            // 
-            // lblPassword
-            // 
-            lblPassword.AutoSize = true;
-            lblPassword.Font = new Font("Segoe UI", 12F);
-            lblPassword.Location = new Point(82, 142);
-            lblPassword.Margin = new Padding(4, 0, 4, 0);
-            lblPassword.Name = "lblPassword";
-            lblPassword.Size = new Size(66, 21);
-            lblPassword.TabIndex = 4;
-            lblPassword.Text = "Пароль:";
-            // 
-            // lblTitle
-            // 
-            lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            lblTitle.Location = new Point(58, 23);
-            lblTitle.Margin = new Padding(4, 0, 4, 0);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(313, 30);
-            lblTitle.TabIndex = 5;
-            lblTitle.Text = "СПОРТИВНЫЕ РЕЗУЛЬТАТЫ";
-            lblTitle.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // LoginForm
-            // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(583, 300);
-            Controls.Add(lblTitle);
-            Controls.Add(lblPassword);
-            Controls.Add(lblLogin);
-            Controls.Add(btnLogin);
-            Controls.Add(txtPassword);
-            Controls.Add(txtLogin);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4, 3, 4, 3);
-            MaximizeBox = false;
-            Name = "LoginForm";
-            StartPosition = FormStartPosition.CenterScreen;
-            Text = "Авторизация";
-            Load += LoginForm_Load;
-            ResumeLayout(false);
-            PerformLayout();
+            this.txtLogin = new System.Windows.Forms.TextBox();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.btnLogin = new System.Windows.Forms.Button();
+            this.lblLogin = new System.Windows.Forms.Label();
+            this.lblPassword = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+
+            this.txtLogin.Location = new System.Drawing.Point(120, 80);
+            this.txtLogin.Name = "txtLogin";
+            this.txtLogin.Size = new System.Drawing.Size(200, 20);
+            this.txtLogin.TabIndex = 0;
+
+            this.txtPassword.Location = new System.Drawing.Point(120, 120);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
+            this.txtPassword.Size = new System.Drawing.Size(200, 20);
+            this.txtPassword.TabIndex = 1;
+
+            this.btnLogin.Location = new System.Drawing.Point(120, 160);
+            this.btnLogin.Name = "btnLogin";
+            this.btnLogin.Size = new System.Drawing.Size(200, 35);
+            this.btnLogin.TabIndex = 2;
+            this.btnLogin.Text = "Войти";
+            this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
+
+            this.lblLogin.AutoSize = true;
+            this.lblLogin.Location = new System.Drawing.Point(50, 83);
+            this.lblLogin.Name = "lblLogin";
+            this.lblLogin.Size = new System.Drawing.Size(41, 13);
+            this.lblLogin.TabIndex = 3;
+            this.lblLogin.Text = "Логин:";
+
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Location = new System.Drawing.Point(50, 123);
+            this.lblPassword.Name = "lblPassword";
+            this.lblPassword.Size = new System.Drawing.Size(48, 13);
+            this.lblPassword.TabIndex = 4;
+            this.lblPassword.Text = "Пароль:";
+
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.Location = new System.Drawing.Point(60, 25);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(320, 24);
+            this.lblTitle.TabIndex = 5;
+            this.lblTitle.Text = "УЧЕТ СПОРТИВНЫХ РЕЗУЛЬТАТОВ";
+
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(450, 240);
+            this.Controls.Add(this.lblTitle);
+            this.Controls.Add(this.lblPassword);
+            this.Controls.Add(this.lblLogin);
+            this.Controls.Add(this.btnLogin);
+            this.Controls.Add(this.txtPassword);
+            this.Controls.Add(this.txtLogin);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.Name = "LoginForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Авторизация";
+            this.Load += new System.EventHandler(this.LoginForm_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
     }
 }
