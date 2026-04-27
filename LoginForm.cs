@@ -16,10 +16,18 @@ namespace SportResult
             string login = txtLogin.Text.Trim();
             string pass = txtPassword.Text.Trim();
 
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(pass))
+            {
+                MessageBox.Show("Введите логин и пароль!");
+                return;
+            }
+
             using (var conn = Database.GetConnection())
             {
-                string sql = "SELECT Role FROM Users WHERE Login = '" + login + "' AND Password = '" + pass + "'";
+                string sql = "SELECT Role FROM Users WHERE Login=@login AND Password=@pass";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@login", login);
+                cmd.Parameters.AddWithValue("@pass", pass);
 
                 object result = cmd.ExecuteScalar();
 
@@ -38,12 +46,6 @@ namespace SportResult
                     MessageBox.Show("Неверный логин или пароль!");
                 }
             }
-        }
-
-        private void LoginForm_Load(object sender, EventArgs e)
-        {
-            txtLogin.Text = "admin";
-            txtPassword.Text = "123";
         }
     }
 }
