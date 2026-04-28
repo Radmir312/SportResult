@@ -13,11 +13,21 @@ namespace SportResult
         public AdminForm()
         {
             InitializeComponent();
+        }
+
+        private void AdminForm_Load(object sender, EventArgs e)
+        {
             LoadData();
         }
 
         private void LoadData()
         {
+            if (connection != null && connection.State == ConnectionState.Open)
+            {
+                connection.Close();
+                connection.Dispose();
+            }
+
             connection = Database.GetConnection();
 
             string sql = @"
@@ -38,36 +48,134 @@ namespace SportResult
             adapter.Fill(table);
             dataGridView1.DataSource = table;
             dataGridView1.Columns["Id"].Visible = false;
+            dataGridView1.AllowUserToAddRows = true;
+        }
+
+        private int GetOrCreateSportsman(string fullName)
+        {
+            string selectSql = "SELECT Id FROM Sportsmen WHERE FullName = @name";
+            SQLiteCommand cmd = new SQLiteCommand(selectSql, connection);
+            cmd.Parameters.AddWithValue("@name", fullName);
+            object result = cmd.ExecuteScalar();
+
+            if (result != null)
+                return Convert.ToInt32(result);
+
+            string insertSql = "INSERT INTO Sportsmen (FullName, Team) VALUES (@name, 'Без команды')";
+            cmd = new SQLiteCommand(insertSql, connection);
+            cmd.Parameters.AddWithValue("@name", fullName);
+            cmd.ExecuteNonQuery();
+
+            return (int)connection.LastInsertRowId;
+        }
+
+        private int GetOrCreateCompetition(string competitionName, string sportName)
+        {
+            int sportId = GetOrCreateSport(sportName);
+
+            string selectSql = "SELECT Id FROM Competitions WHERE Name = @name";
+            SQLiteCommand cmd = new SQLiteCommand(selectSql, connection);
+            cmd.Parameters.AddWithValue("@name", competitionName);
+            object result = cmd.ExecuteScalar();
+
+            if (result != null)
+                return Convert.ToInt32(result);
+
+            string insertSql = "INSERT INTO Competitions (Name, SportId) VALUES (@name, @sportId)";
+            cmd = new SQLiteCommand(insertSql, connection);
+            cmd.Parameters.AddWithValue("@name", competitionName);
+            cmd.Parameters.AddWithValue("@sportId", sportId);
+            cmd.ExecuteNonQuery();
+
+            return (int)connection.LastInsertRowId;
+        }
+
+        private int GetOrCreateSport(string sportName)
+        {
+            string selectSql = "SELECT Id FROM Sports WHERE Name = @name";
+            SQLiteCommand cmd = new SQLiteCommand(selectSql, connection);
+            cmd.Parameters.AddWithValue("@name", sportName);
+            object result = cmd.ExecuteScalar();
+
+            if (result != null)
+                return Convert.ToInt32(result);
+
+            string insertSql = "INSERT INTO Sports (Name, Unit) VALUES (@name, '')";
+            cmd = new SQLiteCommand(insertSql, connection);
+            cmd.Parameters.AddWithValue("@name", sportName);
+            cmd.ExecuteNonQuery();
+
+            return (int)connection.LastInsertRowId;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
+                if (connection == null || connection.State != ConnectionState.Open)
+                {
+                    connection = Database.GetConnection();
+                }
+
                 dataGridView1.EndEdit();
 
                 foreach (DataRow row in table.Rows)
                 {
-                    if (row.RowState == DataRowState.Modified)
+                    if (row.RowState == DataRowState.Added)
                     {
-                        string updateSql = "UPDATE Results SET Result = @result, Place = @place WHERE Id = @id";
+                        string sportsmanName = row["Спортсмен"] != DBNull.Value ? row["Спортсмен"].ToString() : "";
+                        string competitionName = row["Соревнование"] != DBNull.Value ? row["Соревнование"].ToString() : "";
+                        string sportName = row["Вид_спорта"] != DBNull.Value ? row["Вид_спорта"].ToString() : "";
+                        string resultValue = row["Результат"] != DBNull.Value ? row["Результат"].ToString() : "";
+                        int place = row["Место"] != DBNull.Value ? Convert.ToInt32(row["Место"]) : 1;
+
+                        if (string.IsNullOrEmpty(sportsmanName) || string.IsNullOrEmpty(competitionName))
+                            continue;
+
+                        int sportsmanId = GetOrCreateSportsman(sportsmanName);
+                        int sportId = GetOrCreateSport(sportName);
+                        int competitionId = GetOrCreateCompetition(competitionName, sportName);
+
+                        string insertSql = "INSERT INTO Results (SportsmanId, CompetitionId, Result, Place) VALUES (@sid, @cid, @result, @place)";
+                        SQLiteCommand cmd = new SQLiteCommand(insertSql, connection);
+                        cmd.Parameters.AddWithValue("@sid", sportsmanId);
+                        cmd.Parameters.AddWithValue("@cid", competitionId);
+                        cmd.Parameters.AddWithValue("@result", resultValue);
+                        cmd.Parameters.AddWithValue("@place", place);
+                        cmd.ExecuteNonQuery();
+                    }
+                    else if (row.RowState == DataRowState.Modified)
+                    {
+                        string sportsmanName = row["Спортсмен"].ToString();
+                        string competitionName = row["Соревнование"].ToString();
+                        string sportName = row["Вид_спорта"].ToString();
+                        string resultValue = row["Результат"].ToString();
+                        int place = Convert.ToInt32(row["Место"]);
+
+                        int sportsmanId = GetOrCreateSportsman(sportsmanName);
+                        int sportId = GetOrCreateSport(sportName);
+                        int competitionId = GetOrCreateCompetition(competitionName, sportName);
+
+                        string updateSql = "UPDATE Results SET SportsmanId = @sid, CompetitionId = @cid, Result = @result, Place = @place WHERE Id = @id";
                         SQLiteCommand cmd = new SQLiteCommand(updateSql, connection);
-                        cmd.Parameters.AddWithValue("@result", row["Результат"].ToString());
-                        cmd.Parameters.AddWithValue("@place", Convert.ToInt32(row["Место"]));
+                        cmd.Parameters.AddWithValue("@sid", sportsmanId);
+                        cmd.Parameters.AddWithValue("@cid", competitionId);
+                        cmd.Parameters.AddWithValue("@result", resultValue);
+                        cmd.Parameters.AddWithValue("@place", place);
                         cmd.Parameters.AddWithValue("@id", Convert.ToInt32(row["Id"]));
                         cmd.ExecuteNonQuery();
                     }
-                    else if (row.RowState == DataRowState.Added)
+                    else if (row.RowState == DataRowState.Deleted)
                     {
-                        string insertSql = "INSERT INTO Results (SportsmanId, CompetitionId, Result, Place) VALUES (1, 1, @result, @place)";
-                        SQLiteCommand cmd = new SQLiteCommand(insertSql, connection);
-                        cmd.Parameters.AddWithValue("@result", row["Результат"].ToString());
-                        cmd.Parameters.AddWithValue("@place", Convert.ToInt32(row["Место"]));
+                        string deleteSql = "DELETE FROM Results WHERE Id = @id";
+                        SQLiteCommand cmd = new SQLiteCommand(deleteSql, connection);
+                        cmd.Parameters.AddWithValue("@id", Convert.ToInt32(row["Id", DataRowVersion.Original]));
                         cmd.ExecuteNonQuery();
                     }
                 }
 
                 table.AcceptChanges();
+                LoadData();
                 MessageBox.Show("Сохранено!");
             }
             catch (Exception ex)
@@ -80,34 +188,37 @@ namespace SportResult
         {
             if (dataGridView1.CurrentRow != null && !dataGridView1.CurrentRow.IsNewRow)
             {
-                int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Id"].Value);
-
-                string deleteSql = "DELETE FROM Results WHERE Id = @id";
-                SQLiteCommand cmd = new SQLiteCommand(deleteSql, connection);
-                cmd.Parameters.AddWithValue("@id", id);
-                cmd.ExecuteNonQuery();
-
                 dataGridView1.Rows.RemoveAt(dataGridView1.CurrentRow.Index);
             }
         }
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            if (connection != null)
+            try
             {
-                connection.Close();
-                connection.Dispose();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
+            catch { }
+
             Application.Exit();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (connection != null)
+            try
             {
-                connection.Close();
-                connection.Dispose();
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                    connection.Dispose();
+                }
             }
+            catch { }
+
             base.OnFormClosing(e);
         }
     }
