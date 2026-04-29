@@ -52,6 +52,12 @@ namespace SportResult
             dataGridView1.AllowUserToAddRows = true;
         }
 
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string search = txtSearch.Text;
+            table.DefaultView.RowFilter = $"Спортсмен LIKE '%{search}%' OR Соревнование LIKE '%{search}%' OR Вид_спорта LIKE '%{search}%'";
+        }
+
         private int GetOrCreateSportsman(string fullName)
         {
             string selectSql = "SELECT Id FROM Sportsmen WHERE FullName = @name";
