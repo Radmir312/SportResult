@@ -20,73 +20,90 @@
 
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.btnExport = new System.Windows.Forms.Button();
-            this.btnLogout = new System.Windows.Forms.Button();
-            this.lblSearch = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.SuspendLayout();
-
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 50);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(900, 400);
-            this.dataGridView1.TabIndex = 0;
-
-            this.txtSearch.Location = new System.Drawing.Point(60, 15);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(250, 20);
-            this.txtSearch.TabIndex = 1;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-
-            this.btnExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnExport.Location = new System.Drawing.Point(12, 460);
-            this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(150, 35);
-            this.btnExport.TabIndex = 2;
-            this.btnExport.Text = "Экспорт в CSV";
-            this.btnExport.UseVisualStyleBackColor = true;
-            this.btnExport.Click += new System.EventHandler(this.btnExport_Click);
-
-            this.btnLogout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLogout.Location = new System.Drawing.Point(762, 460);
-            this.btnLogout.Name = "btnLogout";
-            this.btnLogout.Size = new System.Drawing.Size(150, 35);
-            this.btnLogout.TabIndex = 3;
-            this.btnLogout.Text = "Выход";
-            this.btnLogout.UseVisualStyleBackColor = true;
-            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
-
-            this.lblSearch.AutoSize = true;
-            this.lblSearch.Location = new System.Drawing.Point(12, 18);
-            this.lblSearch.Name = "lblSearch";
-            this.lblSearch.Size = new System.Drawing.Size(42, 13);
-            this.lblSearch.TabIndex = 4;
-            this.lblSearch.Text = "Поиск:";
-
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(924, 507);
-            this.Controls.Add(this.lblSearch);
-            this.Controls.Add(this.btnLogout);
-            this.Controls.Add(this.btnExport);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.dataGridView1);
-            this.MinimumSize = new System.Drawing.Size(940, 540);
-            this.Name = "WorkerForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Просмотр результатов";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            dataGridView1 = new DataGridView();
+            txtSearch = new TextBox();
+            btnExport = new Button();
+            btnLogout = new Button();
+            lblSearch = new Label();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            SuspendLayout();
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(14, 58);
+            dataGridView1.Margin = new Padding(4, 3, 4, 3);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.Size = new Size(1050, 462);
+            dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(70, 17);
+            txtSearch.Margin = new Padding(4, 3, 4, 3);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(291, 23);
+            txtSearch.TabIndex = 1;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+            // 
+            // btnExport
+            // 
+            btnExport.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnExport.Location = new Point(14, 531);
+            btnExport.Margin = new Padding(4, 3, 4, 3);
+            btnExport.Name = "btnExport";
+            btnExport.Size = new Size(175, 40);
+            btnExport.TabIndex = 2;
+            btnExport.Text = "Экспорт в CSV";
+            btnExport.UseVisualStyleBackColor = true;
+            btnExport.Click += btnExport_Click;
+            // 
+            // btnLogout
+            // 
+            btnLogout.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            btnLogout.Location = new Point(889, 531);
+            btnLogout.Margin = new Padding(4, 3, 4, 3);
+            btnLogout.Name = "btnLogout";
+            btnLogout.Size = new Size(175, 40);
+            btnLogout.TabIndex = 3;
+            btnLogout.Text = "Выход";
+            btnLogout.UseVisualStyleBackColor = true;
+            btnLogout.Click += btnLogout_Click;
+            // 
+            // lblSearch
+            // 
+            lblSearch.AutoSize = true;
+            lblSearch.Location = new Point(14, 21);
+            lblSearch.Margin = new Padding(4, 0, 4, 0);
+            lblSearch.Name = "lblSearch";
+            lblSearch.Size = new Size(45, 15);
+            lblSearch.TabIndex = 4;
+            lblSearch.Text = "Поиск:";
+            // 
+            // WorkerForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1078, 585);
+            Controls.Add(lblSearch);
+            Controls.Add(btnLogout);
+            Controls.Add(btnExport);
+            Controls.Add(txtSearch);
+            Controls.Add(dataGridView1);
+            Margin = new Padding(4, 3, 4, 3);
+            MinimumSize = new Size(1094, 617);
+            Name = "WorkerForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Просмотр результатов";
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
     }
 }

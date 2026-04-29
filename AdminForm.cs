@@ -35,6 +35,7 @@ namespace SportResult
                     r.Id,
                     s.FullName AS Спортсмен,
                     c.Name AS Соревнование,
+                    c.Date AS Дата,
                     sp.Name AS Вид_спорта,
                     r.Result AS Результат,
                     r.Place AS Место
@@ -69,7 +70,7 @@ namespace SportResult
             return (int)connection.LastInsertRowId;
         }
 
-        private int GetOrCreateCompetition(string competitionName, string sportName)
+        private int GetOrCreateCompetition(string competitionName, string sportName, string date)
         {
             int sportId = GetOrCreateSport(sportName);
 
@@ -81,10 +82,11 @@ namespace SportResult
             if (result != null)
                 return Convert.ToInt32(result);
 
-            string insertSql = "INSERT INTO Competitions (Name, SportId) VALUES (@name, @sportId)";
+            string insertSql = "INSERT INTO Competitions (Name, SportId, Date) VALUES (@name, @sportId, @date)";
             cmd = new SQLiteCommand(insertSql, connection);
             cmd.Parameters.AddWithValue("@name", competitionName);
             cmd.Parameters.AddWithValue("@sportId", sportId);
+            cmd.Parameters.AddWithValue("@date", date);
             cmd.ExecuteNonQuery();
 
             return (int)connection.LastInsertRowId;
@@ -125,6 +127,7 @@ namespace SportResult
                     {
                         string sportsmanName = row["Спортсмен"] != DBNull.Value ? row["Спортсмен"].ToString() : "";
                         string competitionName = row["Соревнование"] != DBNull.Value ? row["Соревнование"].ToString() : "";
+                        string date = row["Дата"] != DBNull.Value ? row["Дата"].ToString() : DateTime.Now.ToString("dd.MM.yyyy");
                         string sportName = row["Вид_спорта"] != DBNull.Value ? row["Вид_спорта"].ToString() : "";
                         string resultValue = row["Результат"] != DBNull.Value ? row["Результат"].ToString() : "";
                         int place = row["Место"] != DBNull.Value ? Convert.ToInt32(row["Место"]) : 1;
@@ -133,8 +136,7 @@ namespace SportResult
                             continue;
 
                         int sportsmanId = GetOrCreateSportsman(sportsmanName);
-                        int sportId = GetOrCreateSport(sportName);
-                        int competitionId = GetOrCreateCompetition(competitionName, sportName);
+                        int competitionId = GetOrCreateCompetition(competitionName, sportName, date);
 
                         string insertSql = "INSERT INTO Results (SportsmanId, CompetitionId, Result, Place) VALUES (@sid, @cid, @result, @place)";
                         SQLiteCommand cmd = new SQLiteCommand(insertSql, connection);
@@ -148,13 +150,13 @@ namespace SportResult
                     {
                         string sportsmanName = row["Спортсмен"].ToString();
                         string competitionName = row["Соревнование"].ToString();
+                        string date = row["Дата"].ToString();
                         string sportName = row["Вид_спорта"].ToString();
                         string resultValue = row["Результат"].ToString();
                         int place = Convert.ToInt32(row["Место"]);
 
                         int sportsmanId = GetOrCreateSportsman(sportsmanName);
-                        int sportId = GetOrCreateSport(sportName);
-                        int competitionId = GetOrCreateCompetition(competitionName, sportName);
+                        int competitionId = GetOrCreateCompetition(competitionName, sportName, date);
 
                         string updateSql = "UPDATE Results SET SportsmanId = @sid, CompetitionId = @cid, Result = @result, Place = @place WHERE Id = @id";
                         SQLiteCommand cmd = new SQLiteCommand(updateSql, connection);

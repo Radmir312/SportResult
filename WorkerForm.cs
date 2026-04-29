@@ -24,6 +24,7 @@ namespace SportResult
                         s.FullName AS Спортсмен,
                         s.Team AS Команда,
                         c.Name AS Соревнование,
+                        c.Date AS Дата,
                         sp.Name AS Вид_спорта,
                         r.Result AS Результат,
                         r.Place AS Место
@@ -42,7 +43,7 @@ namespace SportResult
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
             string search = txtSearch.Text;
-            table.DefaultView.RowFilter = $"Спортсмен LIKE '%{search}%' OR Команда LIKE '%{search}%' OR Вид_спорта LIKE '%{search}%'";
+            table.DefaultView.RowFilter = $"Спортсмен LIKE '%{search}%' OR Команда LIKE '%{search}%' OR Вид_спорта LIKE '%{search}%' OR Соревнование LIKE '%{search}%'";
         }
 
         private void btnExport_Click(object sender, EventArgs e)
